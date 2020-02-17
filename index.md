@@ -1,1 +1,1 @@
-I am a Research Scientist at AWS. I like to write about machine learning and deep learning. I have written my previous posts on medium. [Blog link](https://medium.com/@pgrover3). Wanted to try out github pages with fast_template for my new posts on transfer learning. 
+I am a Research Scientist at AWS. I like to write about machine learning and deep learning. I have written a few posts on medium [blog link](https://medium.com/@pgrover3). I am starting to use github pages for my new blog series using `fast_template`. The first blogpost is on transfer learning. 
