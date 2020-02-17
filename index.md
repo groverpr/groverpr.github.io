@@ -1,7 +1,1 @@
-Hello and welcome to this blog. Edit the `index.md` file to change this content. All pages on the blog, including this one, use [Markdown](https://guides.github.com/features/mastering-markdown/). You can include images:
-
-![Image of fast.ai logo](images/logo.png)
-
-## This is a title
-
-And you can include links, like this [link to fast.ai](https://www.fast.ai). Posts will appear after this file. 
+I am a Research Scientist at AWS. I like to write about machine learning and deep learning. I have written my previous posts on medium. [Blog link](https://medium.com/@pgrover3). Wanted to try out github pages with fast_template for my new posts on transfer learning. 
