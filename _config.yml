@@ -7,7 +7,7 @@
 # https://learnxinyminutes.com/docs/yaml/
 
 title: Prince Grover
-description: I am a Research Scientist at AWS, currently working in fraud domain. I like to blog about ML. 
+# description: I am a Research Scientist at AWS, currently working in fraud domain. I like to blog about ML. 
 github_username: groverpr
 
 # Email and twitter are optional:
@@ -30,8 +30,8 @@ plugins:
 
 titles_from_headings:
   enabled:     true
-  strip_title: true
-  collections: true
+  strip_title: false
+  collections: false
 
 highlighter: rouge
 markdown: kramdown
