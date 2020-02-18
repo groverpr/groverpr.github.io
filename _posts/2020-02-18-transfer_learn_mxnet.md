@@ -40,13 +40,13 @@ Examples from both datasets
 Total of 25k reviews. 12.5k positive, 12.5k negative
 
 
-![](/images/transfer_learn_mxnet_files/imdb_eg.png)
+![](images/transfer_learn_mxnet_files/imdb_eg.png)
 
 #### Hotel
 Total of 38.9k reviews. 26.5k positive, 12.4k negative
 
 
-![](/images/transfer_learn_mxnet_files/hotel_eg.png)
+![](images/transfer_learn_mxnet_files/hotel_eg.png)
 
 ## Imports
 
