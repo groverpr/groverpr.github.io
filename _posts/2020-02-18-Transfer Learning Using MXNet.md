@@ -8,7 +8,7 @@ Table of contents:
 
 Transfer learning (TL) is a research problem in machine learning (ML) that focuses on storing knowledge gained while solving one problem and applying it to a different but related problem. For example, knowledge gained while learning to recognize cars could apply when trying to recognize trucks - [wiki definition](https://en.wikipedia.org/wiki/Transfer_learning). 
 
-This post provides you an easy to follow tutorial on how to “train a base neural net” on a dataset and use that pre-trained network to “transfer learn” on a different dataset using MXNet/Gluon framework. The high level steps in this tutorial are very similar for any kind of transfer learning problem - tabular, time series, language or computer vision. The major differences when working with different problems are “network architecture” and “transformations and pre-processesing steps”. My goal is to provide a skeletal using text data (movie and hotel reviews) as an example, that you can adapt for different tasks. I have primarily used MXNet, Catboost and Sklearn libraries for this post. {Here} is the link to the jupyter notebook in case you directly want to jump to the code and skip reading the explainations. 
+This post provides you an easy to follow tutorial on how to “train a base neural net” on a dataset and use that pre-trained network to “transfer learn” on a different dataset using MXNet/Gluon framework. The high level steps in this tutorial are very similar for any kind of transfer learning problem - tabular, time series, language or computer vision. The major differences when working with different problems are “network architecture” and “transformations and pre-processesing steps”. My goal is to provide a skeletal using text data (movie and hotel reviews) as an example, that you can adapt for different tasks. I have primarily used MXNet, Catboost and Sklearn libraries for this post. [Here](https://github.com/groverpr/Machine-Learning/blob/master/notebooks/10_Transfer_Learn_MXNet.ipynb) is the link to the jupyter notebook in case you directly want to jump to the code and skip reading the explainations. 
 
 I haven’t covered any theory about what is transfer learning, why and where is it useful. To learn more on the theory part, I recommend this post by **Sebastian Ruder** - [Transfer Learning - Machine Learning's Next Frontier](https://ruder.io/transfer-learning/). Ruder has done his PhD in this topic. So his work is really detailed. Here is the link to his [thesis](https://ruder.io/thesis/) for deep divers. 
 
@@ -31,14 +31,7 @@ I have used [IMDB movie reviews dataset](https://www.kaggle.com/jcblaise/imdb-se
 
 Both of these datasets contain reviews and a label about whether the review has a positive or a negative sentiment. (movie reviews from IMDB and hotel reviews from Hotel dataset). Therefore, both of these datasets are similar but from very different domains which makes it a good use case for transfer learning. Let’s see how well we can transfer knowledge from movie reviews to hotel reviews. 
 
-Examples from both datasets
-*IMDB *
-Total of 25k reviews. 12.5k positive, 12.5k negative
-
-
-Both of these datasets contain reviews and a label about whether the review has a positive or a negative sentiment. (movie reviews from IMDB and hotel reviews from Hotel dataset). Therefore, both of these datasets are similar but from very different domains which makes it a good use case for transfer learning. Let’s see how well we can transfer knowledge from movie reviews to hotel reviews. 
-
-Examples from both datasets  
+Examples from both datasets. 
 #### IMDB
 Total of 25k reviews. 12.5k positive, 12.5k negative
 
@@ -101,7 +94,7 @@ This particular task requires minimal data transformations as mentioned below.
 3. Tokenize the text. Tokenization example: ["the room was kind of clean"] → ["the", "room", "was", "kind", "of", "clean"]. 
 4. Assign each token (e.g. “the”, “room”, “was”) an integer index. Our neural net will only takes in numbers, not words and we pass in sequence of numbers to learn the language structure. 
 
-If you have used Sklearn library before, I am sure you would be familiar with `.fit()` and `.transform()` methods. You generally fit an algorithm on training data using `.fit()` method and apply the trained model on the test data using `.transform()` or `.predict()`. You can adapt any transformer or a custom algorithm into this class structure. Just create a custom data transformation pipeline using the same Sklearn interface. It helps you to package your code so that it’s easy to use for both experiements and production, and reproducible for different datasets. *(Link or para on why to use pipelines)*. Below is how a data transformation pipeline looks like 
+If you have used Sklearn library before, I am sure you would be familiar with `.fit()` and `.transform()` methods. You generally fit an algorithm on training data using `.fit()` method and apply the trained model on the test data using `.transform()` or `.predict()`. You can adapt any transformer or a custom algorithm into this class structure. Just create a custom data transformation pipeline using the same Sklearn interface. It helps you to package your code so that it’s easy to use for both experiements and production, and reproducible for different datasets. [Here](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html) is official page to sklearn pipelines. Below is how a data transformation pipeline looks like 
 
 
 ```python
@@ -379,10 +372,10 @@ class CustomSeqNet(gluon.nn.HybridBlock):
         return net
 ```
 
-[Block](https://beta.mxnet.io/api/gluon/mxnet.gluon.nn.Block.html#mxnet.gluon.nn.Block) is the baseclass for all neural network layers. The first line of code above **`CustomSeqNet(gluon.nn.HybridBlock)`** uses [HybridBlock](https://mxnet.apache.org/api/python/docs/api/gluon/hybrid_block.html) instead of Block to define the model. It’s similar to Block but provides an option for symbolic programming that allows fast computations. Once we call **`hybridize()`** on network, it creates a cached symbolic graph representing the forward computation. It uses that cached graph to do computation rather than going calling hybrid_forward each time. This is one of the USPs of MXNet over other DL frameworks. It gives all of the benefits of imperative programming (PyTorch, Chainer) but still exploits, whenever possible, the speed and memory efficiency of symbolic programming (Theano, Tensorflow). Just call **`network.hybridize()`** and your network gets compiled to run faster. 
+[Block](https://beta.mxnet.io/api/gluon/mxnet.gluon.nn.Block.html#mxnet.gluon.nn.Block) is the baseclass for all neural network layers. The first line of code above **`CustomSeqNet(gluon.nn.HybridBlock)`** uses [HybridBlock](https://mxnet.apache.org/api/python/docs/api/gluon/hybrid_block.html) instead of Block to define the model. It’s similar to Block but provides an option for symbolic programming that allows fast computations. Once we call **`hybridize()`** on network, it creates a cached symbolic graph representing the forward computation. It uses that cached graph to do computation rather than calling hybrid_forward each time. This is one of the USPs of MXNet over other DL frameworks. It gives all of the benefits of imperative programming (PyTorch, Chainer) but still exploits, whenever possible, the speed and memory efficiency of symbolic programming (Theano, Tensorflow). Just call **`network.hybridize()`** and your network gets compiled to run faster. 
 
-The `_init_` takesn in arguments in amount of dropouts in dense layers, size of hidden layers in GRU, size of embedding layer etc. The `hybrid_forward` defines the same computation graph as shown in the network architecture diagram above. 
-**1.** Embedding → **2.** GRU → Get last hidden layer from GRU → **3.** Sequence of dense layers → **4.** Final layer that gives one number as output. 
+The `_init_` takes in arguments like dropouts in dense layers, size of hidden layers in GRU, size of embedding layer etc. The `hybrid_forward` defines the same computation graph as shown in the network architecture diagram above. 
+**1.** Embedding → **2.** GRU → Last hidden layer from GRU → **3.** Sequence of dense layers → **4.** Final layer that gives one number as output. 
 
 Code chunk to create the network object using `CustomSeqNet` class.
 
@@ -417,23 +410,24 @@ This part tells the network what it needs to do to learn the parameters based on
     1. Make prediction from the network using current parameters
     2. Calcualate and print loss values on training and validation sets
     3. Using chain rule on computation graph, calculate gradients for each parameter
-    4. Using gradients (from step 4c), perform a single step of gradient update with optimizer defined in step 2. 
+    4. Using gradients [from step 4(iii)], perform a single step of gradient update with optimizer defined in step 2. 
 5. Perform step 4 multiple times upto point when you observe that validation loss is not reducing anymore or starts to increase. 
 
-The code performing steps as defined above. **Note:** Go to the notebook (link) for util function `evaluate_network` function  which gives loss value, auc and prediction for given mini batch. 
+The code performing steps as defined above. **Note:** Go to the [notebook](https://github.com/groverpr/Machine-Learning/blob/master/notebooks/10_Transfer_Learn_MXNet.ipynb) for util function `evaluate_network` function  which gives loss value, auc and prediction for given mini batch. 
 
 
 ```python
 def train(network, 
           train_data, 
           holdout_data, 
+          loss,
           epochs, 
           ctx, 
           lr=1e-2,
           wd=1e-5,
           optimizer='adam'):
     
-    # 1. Define optimizer
+    # 2. Define optimizer
     trainer = gluon.Trainer(network.collect_params(), optimizer,
                             {'learning_rate': lr, 'wd': wd})
     
@@ -448,7 +442,7 @@ def train(network,
                                                                                     train_auc,
                                                                                     valid_auc))
     
-    # 3. Train the network
+    # 4. Train the network
     for e in range(epochs):
         for idx, ((data, length), label) in enumerate(train_data):  # For each mini batch
             X_ = gluon.utils.split_and_load(data, ctx, even_split=False)  # splits data to go to each gpu
@@ -477,9 +471,9 @@ def train(network,
 Initialize the network and call the `train` function.
 
 ```python
-# Xavier initialization. 
+# 1. Xavier initialization. 
 net1.initialize(mx.init.Xavier(), ctx=ctx, force_reinit=True)
-# Binary cross entropy loss for 2 class classification
+# 3. Binary cross entropy loss for two class classification
 loss = gluon.loss.SigmoidBCELoss()
 
 train(
@@ -498,18 +492,18 @@ The network after training for only 5 epochs achieves a good seperation between 
 
 ![](../../../../images/transfer_learn_mxnet_files/loss_curve.png "Model training")
 
-![](../../../../images/transfer_learn_mxnet_files/auc.png)
+![](../../../../images/transfer_learn_mxnet_files/auc.png "Scores from model for positive and negative labels")
 
 ## Step 5. Extracting Embeddings from the Network
 
 This one network learnt multiple things including how to represent each english word into a high dimentional vector, (through embedding layer), how to make sentences in english language (through GRU) and how to classify a given input of review as positive or negative (through final dense layer). Using [t-SNE](https://lvdmaaten.github.io/tsne/), we can visualize high D vectors into 2D/3D space. Let’s see what kind of embeddings our network learnt for english words and was their any pattern in the words which later helped network to classify sentences into positive or negative sentiment. 
 
-Our network learnt 64 dimentional embedding representation for 63,167 unique words. It is going to be very cluttered to visualize embeddings for all words. Let’s look at 100 example words and their t-SNE mapping from 64D to 2D. 
+Our network learnt 64 dimentional embedding representation (from embedding layer) for 63,167 unique words. It is going to be very cluttered to visualize embeddings for all words. Let’s look at 100 example words and their t-SNE mapping from 64D to 2D. 
 
 
 ![](../../../../images/transfer_learn_mxnet_files/tsne.png "Visualization of leant embeddings")
 
-From the plot, we can clearly see that from the embedding layer itself, network had started to learn how to differentiate negative words from positive words. The words in green area (excellent, loved, fun, perfect, wonderful, amazing etc.) look very positive and the words in red area (bad, mess, pointless, disappointment, poorly, terrible etc.) look very negative. The negative words seem to have representation closer to other negative words and far from positive words and vice versa. 
+From the plot, we can clearly see that from the embedding layer itself, network had started to learn how to differentiate negative words from positive words. The positive words are clustered together in green area (excellent, loved, fun, perfect, wonderful, amazing etc.) and the negative words are clustered together in red area (bad, mess, pointless, disappointment, poorly, terrible etc.). 
 
 Code for generating t-SNE is straightforward using **`sklearn.manifold`** module. 
 
@@ -553,17 +547,21 @@ _ = ax.set_title('t-SNE of Word Tokens')
 
 ## Step 6. Transfer Learning on a Different Dataset
 
-Now the final step.
- We are happy with network performance on IMDB dataset and word vector representations also make sense for the task at hand. Final task in this tutorial is to use the learnt network weights and use them for a similar task in other domain. The question we are trying to answer here is whether the knowledge we gained by reading movie reviews is transferable to reviews in other domains like hotels, amazon product etc. This transfer of knowledge can save hours of training time.      
+Now the final step!  
+We are happy with network performance on IMDB dataset and the word vector representations also make sense for the task at hand. Final task in this tutorial is to use the learnt network weights and use them for a similar task in other domain. The question we are trying to answer here is whether the knowledge we gained by reading movie reviews is transferable to reviews in other domains like hotels, amazon product etc. This transfer of knowledge can save hours of training time and can be very useful for businesses with lack of data or labels.
 
 There are multiple ways to use the knowledge of a network.
 
-1. *Weights as it is: *Just use the network we trained on movie reviews to directly predict the sentiment score on other datasets like hotel reviews, amazon product reviews. This means you might not need to train anything on the new datasets. It can be very useful if you don’t have enough data in the new domain or if you don’t have any labels at all to train the model at the first place. *(cold start problems).  *
+#### Weights as it is: 
+Just use the network we trained on movie reviews to directly predict the sentiment score on other datasets like hotel reviews, amazon product reviews. This means you might not need to train anything on the new datasets. It can be very useful if you don’t have enough data in the new domain or if you don’t have any labels at all to train the model at the first place. **(cold start problems).**
 
-1. *Weights as feature extractor: *The network we trained has many layers. The inner layers learn the basic representations like word and sentence formations, and the outer layers performs specific task at hand like classifying sentence into positive or negative sentiment. We can use the output from any inner layer (which are generic vector representations) and use that as features/inputs for other problems and ML algorithms. This can also be used as a feature transformation step if you want to use other features like product category, meta data about reviewer together with the review to classifiy the sentiment. You can use the embedding of text together with other features and train a Catboost model. Learn more about using Catboost for categorical data from [this](https://towardsdatascience.com/getting-deeper-into-categorical-encodings-for-machine-learning-2312acd347c8) blog. 
-2. *Weights as initializations: *I recently read the paper [lottery ticket hypothesis](https://arxiv.org/abs/1803.03635). After reading it, I can not under-emphasize the importance of weight initializations in a neural net. The weights you start your network with has a large impact on the final loss you achieve. During pre-training we initalized network randomly (using Xavier initialization) and trained for a few iterations. But now that we already have some knowledge about reviews from IMDB, why not use it. We can train a similar network for hotel reviews. But rather than starting from random weights, we can start from the weights of the pre-trained network. This will reduce training time and improve the performance on the new dataset.
+#### Weights as feature extractor: 
+The network we trained has many layers. The inner layers learn the basic representations like word and sentence formations, and the outer layers performs specific task at hand like classifying sentence into positive or negative sentiment. We can use the output from any inner layer (which are generic vector representations) and use that as features/inputs for other problems. This can also be used as a feature transformation step if you want to use other features like product category, meta data about reviewer together with the review to classifiy the sentiment. Just use the embedding of text together with other features and train a Catboost model. This is shown in the [shared notebook](https://github.com/groverpr/Machine-Learning/blob/master/notebooks/10_Transfer_Learn_MXNet.ipynb). Learn more about using Catboost for categorical data from [this](https://towardsdatascience.com/getting-deeper-into-categorical-encodings-for-machine-learning-2312acd347c8) blog. 
 
-Third one is the most commonly used approach in transfer learning scenario as it allows you to use the same network architecture for different datasets. We will discuss this approach here, but you can also find how to use the other two approaches from the shared notebook.  
+#### Weights as initializations:
+I recently read the paper [lottery ticket hypothesis](https://arxiv.org/abs/1803.03635). After reading it, I can not under-emphasize the importance of weight initializations in a neural net. The weights you start your network with has a large impact on the final loss you achieve. During pre-training we initalized network randomly (using Xavier initialization) and trained for a few iterations. But now that we already have some knowledge about reviews from IMDB, why not use it. We can train a similar network for hotel reviews. But rather than starting from random weights, we can start from the weights of the pre-trained network. This will reduce training time and improve the performance on the new dataset.
+
+Third one is the most commonly used approach in transfer learning scenario as it allows you to use the same network architecture for different datasets. We will discuss this approach here, but you can also find how to use the other two approaches from the [shared notebook](https://github.com/groverpr/Machine-Learning/blob/master/notebooks/10_Transfer_Learn_MXNet.ipynb).  
 
 
 ### Save and load the model
@@ -596,10 +594,11 @@ def load_base_model(model_path, epoch, ctx, layer_name=None, n_inputs=2):
 * **epoch:** It’s value is dependent on which epoch value you used when saving the model using .export.
 * **ctx:** Context (e.g. mx.gu(0))
 * **n_inputs:** Number of inputs in the feature dataloader. In this case, we created dataloader with two input values. 
-    1. Word tokens, 2. Length of each input sequence.
-* *layer_name:* Internal node name you are interested to get output of. [**`.get_internals()`**](https://beta.mxnet.io/api/symbol/_autogen/mxnet.symbol.Symbol.get_internals.html) on symbol gives a list of outputs of each internal node. Just calling `net(*inputs)` gives output of the full network. You can get also output from any internal layer using `.get_internals()` and indexing over layer name. The output of `get_internals()` is shown below. 
+    1. Word tokens,
+    2. Length of each input sequence.
+* **layer_name:** Internal node name you are interested to get output of. [`.get_internals()`](https://beta.mxnet.io/api/symbol/_autogen/mxnet.symbol.Symbol.get_internals.html) on symbol gives a list of outputs of each internal node. Just calling `net(*inputs)` gives output of the full network. You can get also output from any internal layer using `.get_internals()` and indexing over layer name. The output of `get_internals()` is shown below. 
 
-I have omitted some parts to fit for this page but get_internals() gives all name of all internal nodes, starting from input node (data0) to the final output node (CustomSeqNet_output_fwd) 
+I have omitted some parts to fit for this page but get_internals() gives name of all internal nodes, starting from input node (data0) to the final output node (CustomSeqNet_output_fwd) 
 
 
 ```python
@@ -637,7 +636,7 @@ net2 = load_base_model(pretrained_model_path,
 
 ### Train the network on new dataset
 
-Once you load the saved model, call **`train()`** function on new dataset without re-initializing the net. It will start training from the parameters learnt from previous training. Optionally, you can also freeze some layers which makes weights of those layers untrainable. During backpropagation, the weights of all layers except frozen ones change. It is generally recommemded to train only outer layers during the first phase in transfer learning as those layers are data specific. Internal layers which are general represetations can be fixed or trained with lower learning rates.  
+Once you load the saved model, call `train()` function on new dataset without re-initializing the net. It will start training from the parameters learnt from previous data. Optionally, you can also freeze some layers which makes weights of those layers untrainable. During backpropagation, the weights of all layers except frozen ones change. It is generally recommemded to train only outer layers during the first phase in transfer learning as those layers are data specific. Internal layers which are general represetations can be fixed or trained with lower learning rates.  
 
 ```python
 # Code to freeze layers except last dense layer
@@ -646,7 +645,7 @@ for param in net2.collect_params('.*review|.*emb').values():
     param.grad_req = 'null'
     
 # Unfreeze the frozen layers
-for param in net1.collect_params('.*review|.*emb').values():
+for param in net2.collect_params('.*review|.*emb').values():
     param.grad_req = 'write'
 ```
 
@@ -673,15 +672,12 @@ train(
 
 Using transfer learning on hotel reviews data, we get >93% auc in very few epochs. It also has a high score (>85% auc) at 0th iteration which shows that we would have gotten this much without re-training at all. It would have taken more number of epochs if initialized from scratch. 
 
-![](../../../../images/transfer_learn_mxnet_files/loss_curve2.png "Model training")
+![](../../../../images/transfer_learn_mxnet_files/loss_curve2.png "Model training progress")
 
 ## Conclusion
 
-We learnt how to do a number of things on MXNet/Gluon and Sklearn - defining custom transformers, network architecuture and dataloader, executing network training loop and generating tSNE plots for word embeddings.  
+We learnt a bunch of things in this tutorial using MXNet/Gluon and Sklearn. How to transform and prepare a tabular data, define and train a custom neural net from scratch, visualize embeddings and using learnt weights for transfer learning on a new dataset. 
 
-## References
-
--
-- 
+I hope this tutorial was helpful. 
 
 # End
