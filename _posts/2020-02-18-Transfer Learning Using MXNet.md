@@ -371,7 +371,14 @@ class CustomSeqNet(gluon.nn.HybridBlock):
         net = self.output(net) # 4
         return net
 ```
-
+Input arguments: 
+* **input_output_embed_map:** Dictionary with two keys. 
+Key 1. `token_embed` is tuple of number of words in vocabulary and required dimension of word embedding
+Key 2. `hidden_embed` has required dimension of hidden layer in GRU
+* **dense_sizes:** List of required output dimension from each dense layer. Network will have as many dense layers as elements of this list. Default: Single dense layer output of dim 100 
+* **dropouts:** List of required dropout in each dense layer. Default: Single dense layer output of dropout 0.2 
+* **activation:** String. Activation function. Default: "relu".  
+  
 [Block](https://beta.mxnet.io/api/gluon/mxnet.gluon.nn.Block.html#mxnet.gluon.nn.Block) is the baseclass for all neural network layers. The first line of code above `CustomSeqNet(gluon.nn.HybridBlock)` uses [HybridBlock](https://mxnet.apache.org/api/python/docs/api/gluon/hybrid_block.html) instead of Block to define the model. It’s similar to Block but provides an option for symbolic programming that allows fast computations. Once we call `hybridize()` on network, it creates a cached symbolic graph representing the forward computation. It uses that cached graph to do computation rather than calling hybrid_forward each time. This is one of the USPs of MXNet over other DL frameworks. It gives all of the benefits of imperative programming (PyTorch, Chainer) but still exploits, whenever possible, the speed and memory efficiency of symbolic programming (Theano, Tensorflow). Just call `network.hybridize()` and your network gets compiled to run faster. 
 
 The `_init_` takes in arguments like dropouts in dense layers, size of hidden layers in GRU, size of embedding layer etc. The `hybrid_forward` defines the same computation graph as shown in the network architecture diagram above. 
