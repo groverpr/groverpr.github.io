@@ -687,4 +687,6 @@ We learnt a bunch of things in this tutorial using MXNet/Gluon and Sklearn. How 
 
 I hope this tutorial was helpful. 
 
+Btw, I create this post directly from Jupyer notebook using [nbdev](http://nbdev.fast.ai/). It's pretty cool!  
+
 # End
