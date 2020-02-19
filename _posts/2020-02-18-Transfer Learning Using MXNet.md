@@ -1,4 +1,3 @@
-# Transfer Learning Using MXNet
 > This post provides you an easy to follow tutorial on how to “train a base neural net” on a dataset and use that pre-trained network to “transfer learn” on a different dataset using MXNet/Gluon framework. 
 
 Table of contents:
@@ -7,7 +6,7 @@ Table of contents:
 {:toc}
 
 
-Transfer learning (TL) is a research problem in machine learning (ML) that focuses on storing knowledge gained while solving one problem and applying it to a different but related problem. For example, knowledge gained while learning to recognize cars could apply when trying to recognize trucks [wiki definition](https://en.wikipedia.org/wiki/Transfer_learning). 
+Transfer learning (TL) is a research problem in machine learning (ML) that focuses on storing knowledge gained while solving one problem and applying it to a different but related problem. For example, knowledge gained while learning to recognize cars could apply when trying to recognize trucks - [wiki definition](https://en.wikipedia.org/wiki/Transfer_learning). 
 
 This post provides you an easy to follow tutorial on how to “train a base neural net” on a dataset and use that pre-trained network to “transfer learn” on a different dataset using MXNet/Gluon framework. The high level steps in this tutorial are very similar for any kind of transfer learning problem - tabular, time series, language or computer vision. The major differences when working with different problems are “network architecture” and “transformations and pre-processesing steps”. My goal is to provide a skeletal using text data (movie and hotel reviews) as an example, that you can adapt for different tasks. I have primarily used MXNet, Catboost and Sklearn libraries for this post. {Here} is the link to the jupyter notebook in case you directly want to jump to the code and skip reading the explainations. 
 
@@ -15,14 +14,13 @@ I haven’t covered any theory about what is transfer learning, why and where is
 
 The post and notebook combined give you tutorial to the the following things. These topics are also independent tutorials and can be ripped off to use for other problems as well.
 
-1. How to write sklearn transformers? (Provide links that jumps to the topic)
-2. How to create a custom neural net architecture on MXNet?
-3. How to train a network on MXNet? 
-4. How to extract output (a.k.a embeddings) from any layer from the trained model?
-5. How to visualize embeddings using TSNE?
-6. How to save and load a trained MXNet network
-7. How to freeze/unfreeze any layer in MXNet?
-8. How to relearn network parameters using a new dataset?  
+1. [How to write sklearn transformers?](#Step-1.-Sklearn-Data-Transformations)
+2. [How to create a custom neural net architecture on MXNet?](#Step-3.-MXNet-Custom-Networks)
+3. [How to train a network on MXNet?](#Step-4.-Training-Base-Model) 
+5. [How to extract and visualize embeddings from any layer of the trained model using t-SNE?](#Step-5.-Extracting-Embeddings-from-the-Network)
+6. [How to save and load a trained MXNet network](#Save-and-load-the-model)
+7. [How to freeze/unfreeze any layer in MXNet?](#Train-the-network-on-new-dataset)
+8. [How to relearn network parameters using a new dataset?](#Train-the-network-on-new-dataset)  
 
 So let’s dive right in! 
 
