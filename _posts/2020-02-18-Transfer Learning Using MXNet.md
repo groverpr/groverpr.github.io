@@ -14,13 +14,13 @@ I haven’t covered any theory about what is transfer learning, why and where is
 
 The post and notebook combined give you tutorial to the the following things. These topics are also independent tutorials and can be ripped off to use for other problems as well.
 
-1. [How to write sklearn transformers?](#Step-1.-Sklearn-Data-Transformations)
-2. [How to create a custom neural net architecture on MXNet?](#Step-3.-MXNet-Custom-Networks)
-3. [How to train a network on MXNet?](#Step-4.-Training-Base-Model) 
-5. [How to extract and visualize embeddings from any layer of the trained model using t-SNE?](#Step-5.-Extracting-Embeddings-from-the-Network)
-6. [How to save and load a trained MXNet network](#Save-and-load-the-model)
-7. [How to freeze/unfreeze any layer in MXNet?](#Train-the-network-on-new-dataset)
-8. [How to relearn network parameters using a new dataset?](#Train-the-network-on-new-dataset)  
+1. [How to write sklearn transformers?](#step-1-sklearn-data-transformations)
+2. [How to create a custom neural net architecture on MXNet?](#step-3-mxnet-custom-networks)
+3. [How to train a network on MXNet?](#step-4-training-base-model) 
+5. [How to extract and visualize embeddings from any layer of the trained model using t-SNE?](#step-5-extracting-embeddings-from-the-network)
+6. [How to save and load a trained MXNet network](#save-and-load-the-model)
+7. [How to freeze/unfreeze any layer in MXNet?](#train-the-network-on-new-dataset)
+8. [How to relearn network parameters using a new dataset?](#train-the-network-on-new-dataset)  
 
 So let’s dive right in! 
 
