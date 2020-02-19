@@ -533,7 +533,7 @@ few_words = ['great', 'excellent', 'best', 'perfect', 'wonderful', 'well',
        'unless', 'looks', 'why', 'wasted', 'save', 'oh', 'attempt',
        'problem', 'acting', 'lacks', 'seems']
 
-tok_embed = net.embed.weight.list_data()[0].asnumpy()  # extract weights of embedding matrix from network
+tok_embed = net1.embed.weight.list_data()[0].asnumpy()  # extract weights of embedding matrix from network
 # use token to index map from transformer to get token for each index in embedding matrix
 tok_trans = transformer.named_steps['token2index']
 tok_embed_sub = tok_embed[[tok_trans.tok2idx[i] for i in few_words]]
