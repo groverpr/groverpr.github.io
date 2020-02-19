@@ -372,7 +372,7 @@ class CustomSeqNet(gluon.nn.HybridBlock):
         return net
 ```
 
-[Block](https://beta.mxnet.io/api/gluon/mxnet.gluon.nn.Block.html#mxnet.gluon.nn.Block) is the baseclass for all neural network layers. The first line of code above **`CustomSeqNet(gluon.nn.HybridBlock)`** uses [HybridBlock](https://mxnet.apache.org/api/python/docs/api/gluon/hybrid_block.html) instead of Block to define the model. It’s similar to Block but provides an option for symbolic programming that allows fast computations. Once we call **`hybridize()`** on network, it creates a cached symbolic graph representing the forward computation. It uses that cached graph to do computation rather than calling hybrid_forward each time. This is one of the USPs of MXNet over other DL frameworks. It gives all of the benefits of imperative programming (PyTorch, Chainer) but still exploits, whenever possible, the speed and memory efficiency of symbolic programming (Theano, Tensorflow). Just call **`network.hybridize()`** and your network gets compiled to run faster. 
+[Block](https://beta.mxnet.io/api/gluon/mxnet.gluon.nn.Block.html#mxnet.gluon.nn.Block) is the baseclass for all neural network layers. The first line of code above `CustomSeqNet(gluon.nn.HybridBlock)` uses [HybridBlock](https://mxnet.apache.org/api/python/docs/api/gluon/hybrid_block.html) instead of Block to define the model. It’s similar to Block but provides an option for symbolic programming that allows fast computations. Once we call `hybridize()` on network, it creates a cached symbolic graph representing the forward computation. It uses that cached graph to do computation rather than calling hybrid_forward each time. This is one of the USPs of MXNet over other DL frameworks. It gives all of the benefits of imperative programming (PyTorch, Chainer) but still exploits, whenever possible, the speed and memory efficiency of symbolic programming (Theano, Tensorflow). Just call `network.hybridize()` and your network gets compiled to run faster. 
 
 The `_init_` takes in arguments like dropouts in dense layers, size of hidden layers in GRU, size of embedding layer etc. The `hybrid_forward` defines the same computation graph as shown in the network architecture diagram above. 
 **1.** Embedding → **2.** GRU → Last hidden layer from GRU → **3.** Sequence of dense layers → **4.** Final layer that gives one number as output. 
@@ -505,7 +505,7 @@ Our network learnt 64 dimentional embedding representation (from embedding layer
 
 From the plot, we can clearly see that from the embedding layer itself, network had started to learn how to differentiate negative words from positive words. The positive words are clustered together in green area (excellent, loved, fun, perfect, wonderful, amazing etc.) and the negative words are clustered together in red area (bad, mess, pointless, disappointment, poorly, terrible etc.). 
 
-Code for generating t-SNE is straightforward using **`sklearn.manifold`** module. 
+Code for generating t-SNE is straightforward using `sklearn.manifold` module. 
 
 ```python
 few_words = ['great', 'excellent', 'best', 'perfect', 'wonderful', 'well',
@@ -571,7 +571,7 @@ Once we are done training a base network, it’s best to save the model artifact
 net1.export(os.path.join("models", "imdb_v1"), epoch=0) 
 ```
 
-**`.export`** saves two model artifacts. **`imdb_v1-symbol.json`** and **`imdb_v1-0000.params`** that have network graph structure and trained parameter values respectively. In order to load the saved model, we use **`gluon.nn.SymbolBlock.imports`** and specify model artifact path, number of inputs (in this case two inputs, 1. word encoding and 2. word lengths) and context (cpu or gpu). 
+`.export` saves two model artifacts. `imdb_v1-symbol.json` and `imdb_v1-0000.params` that have network graph structure and trained parameter values respectively. In order to load the saved model, we use `gluon.nn.SymbolBlock.imports` and specify model artifact path, number of inputs (in this case two inputs, 1. word encoding and 2. word lengths) and context (cpu or gpu). 
 
 ```python
 def load_base_model(model_path, epoch, ctx, layer_name=None, n_inputs=2):
