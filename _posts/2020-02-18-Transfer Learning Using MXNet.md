@@ -27,8 +27,10 @@ So let’s dive right in!
 
 ## Data used
 
-![](https://i.pinimg.com/originals/ca/bb/e0/cabbe0d25bf340a7af14c67e6e5fc39b.png)
 ![](https://m.media-amazon.com/images/M/MV5BMjIxMjgxNTk0MF5BMl5BanBnXkFtZTgwNjIyOTg2MDE@._V1_.jpg)
+
+![](https://i.pinimg.com/originals/ca/bb/e0/cabbe0d25bf340a7af14c67e6e5fc39b.png)
+
 
 I have used [IMDB movie reviews dataset](https://www.kaggle.com/jcblaise/imdb-sentiments#train.csv) to train the base network and transfered the learning done from this base network to [Hotel reviews dataset](https://www.kaggle.com/harmanpreet93/hotelreviews). In general, transfer learning is more useful on smaller or unlabelled data whereas base networks are trained on larger datasets. (Shared links might not be the original source of these datasets. These are just the links I used for my analysis).
 
